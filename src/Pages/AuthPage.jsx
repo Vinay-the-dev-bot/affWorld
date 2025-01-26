@@ -38,13 +38,14 @@ const AuthPage = () => {
         const response = await axios.post(`${base_URL}/users/login`, formData, {
           headers: { "Content-Type": "multipart/form-data" }
         });
-        const { token, status, msg } = response.data;
+        const { token, status, msg, userData } = response.data;
         if (status) {
           dispatch({
             type: "PROFILE",
-            payload: { token, ...response.data?.userData, isLoggedIn: true }
+            payload: { token, userData, isLoggedIn: true }
           });
           localStorage.setItem("taskConnectToken", token);
+          localStorage.setItem("taskConnectUserData", JSON.stringify(userData));
           toast({
             description: msg || "Logged in.",
             status: "success",

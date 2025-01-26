@@ -38,7 +38,15 @@ const HomePage = () => {
     <>
       <div className="w-full flex">
         <div className="min-h-screen w-[25%] border-r-[1px] border-gray-300 bg-gray-50">
-          <p className="p-4 text-3xl font-bold text-gray-800">{name}</p>
+          <div>
+            <div className="m-auto pl-[20px] px-4 pt-4 text-transparent bg-gradient-to-r from-green-400 to-red-400 bg-clip-text text-4xl">
+              <span className="text-[#3498DB] text-xl">task</span>
+              Connect
+            </div>
+            <p className="p-4 pl-[20px] text-3xl font-bold text-gray-800">
+              {name}
+            </p>
+          </div>
           <div className="flex flex-col px-4">
             {tabs.map((tab, key) => (
               <p
@@ -55,7 +63,7 @@ const HomePage = () => {
               </p>
             ))}
             <p
-              className={`cursor-pointer bg-red-600 px-4 py-2 rounded-lg mt-[15px] text-sm font-medium transition-all duration-200 `}
+              className={`cursor-pointer text-white bg-[#EF0107] px-4 py-2 rounded-lg mt-[15px] text-sm font-medium transition-all duration-200 `}
               style={{ boxShadow: "rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px" }}
               onClick={() => {
                 dispatch({ type: LOGOUT });

@@ -270,15 +270,17 @@ const tasks = [
   }
 ];
 
-const userToken = localStorage.getItem("taskConnectToken");
-// const initialAppState = { feedData, tasks };
+const userToken = localStorage.getItem("taskConnectToken") || "";
+const { name, email } =
+  JSON.parse(localStorage.getItem("taskConnectUserData")) || {};
 const initialAppState = { feedData: [], tasks: [] };
 const initialUserState = {
   isLoggedIn: userToken ? true : false,
   text: "Vinay Meti",
-  token: userToken
+  token: userToken,
+  name: name || "",
+  email: email || ""
 };
-
 const appReducer = (state = initialAppState, action) => {
   switch (action.type) {
     case SUGGESTIONS:
