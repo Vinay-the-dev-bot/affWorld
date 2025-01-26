@@ -1,7 +1,7 @@
 import { useDisclosure } from "@chakra-ui/react";
 import CreatePost from "../Components/CreatePost";
 import { useDispatch, useSelector } from "react-redux";
-import HomeFeed from "../Components/homeFeed";
+import HomeFeed from "../Components/HomeFeed";
 import { useEffect, useState } from "react";
 import Tasks from "../Components/Tasks";
 import CreateTask from "../Components/CreateTask";
