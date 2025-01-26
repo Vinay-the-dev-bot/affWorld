@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import apple from "../assets/Images/apple.png";
 import Facebook from "../assets/Images/Facebook.png";
 import google from "../assets/Images/google.png";
@@ -13,15 +13,12 @@ const AuthPage = () => {
   const [isLogin, setIsLogin] = useState(true);
   const [passwordVisible, setPasswordVisible] = useState(false);
   const navigate = useNavigate();
-  const clientId = "YOUR_GOOGLE_CLIENT_ID";
-  const redirectUri = "YOUR_REDIRECT_URI";
 
   const googleAuthUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${
     import.meta.env.VITE_GOOGLE_CLIENT_CODE
   }&redirect_uri=${
     import.meta.env.VITE_REDIRECT_URI
   }&response_type=code&scope=openid%20profile%20email`;
-  console.log(googleAuthUrl);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -100,7 +97,6 @@ const AuthPage = () => {
       }
     }
   };
-  // Handle Google OAuth callback
   const handleGoogleCallback = async (code) => {
     try {
       const response = await axios.post(`${base_URL}/users/google-login`, {
@@ -146,9 +142,14 @@ const AuthPage = () => {
     }
   };
 
+  const calledRef = useRef(false);
   useEffect(() => {
-    getGoogleAuthCode();
-  }, []);
+    if (!calledRef.current) {
+      getGoogleAuthCode();
+      calledRef.current = true;
+    }
+  }, [calledRef]);
+
   return (
     <form onSubmit={handleSubmit}>
       <div className="w-[90%] h-full my-[50px] mx-auto flex bg-white gap-[20px]">
@@ -316,9 +317,7 @@ const AuthPage = () => {
           <div className="flex justify-evenly">
             <img style={{ cursor: "pointer" }} src={Facebook} alt="Facebook" />
             <img style={{ cursor: "pointer" }} src={apple} alt="Apple" />
-            <a href={googleAuthUrl} target="_self" rel="noopener noreferrer">
-              <img style={{ cursor: "pointer" }} src={google} alt="Google" />
-            </a>
+            <img style={{ cursor: "pointer" }} src={google} alt="Google" />
           </div>
         </div>
         <div className="w-1/2  rounded-2xl bg-[#000842]  m-auto">
