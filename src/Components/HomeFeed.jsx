@@ -34,7 +34,7 @@ const HomeFeed = () => {
       }
     };
 
-    fetchPosts();
+    if (token) fetchPosts();
   }, []);
   return (
     <>
