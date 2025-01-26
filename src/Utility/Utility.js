@@ -9,7 +9,8 @@ export const TASKS = "TASKS";
 export const POSTS = "POSTS";
 export const SINGLE_POST = "SINGLE_POST";
 export const SINGLE_TASK = "SINGLE_TASK";
-export const base_URL = "http://localhost:4500";
+// export const base_URL = "http://localhost:4500";
+export const base_URL = import.meta.env.VITE_BASE_URL;
 export const tabs = ["Feed", "Tasks"];
 export const taskStatus = {
   inProgress: "In Progress",

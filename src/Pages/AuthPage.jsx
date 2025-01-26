@@ -317,9 +317,9 @@ const AuthPage = () => {
           <div className="flex justify-evenly">
             <img style={{ cursor: "pointer" }} src={Facebook} alt="Facebook" />
             <img style={{ cursor: "pointer" }} src={apple} alt="Apple" />
-            <a href={googleAuthUrl} target="_self" rel="noopener noreferrer">
-              <img style={{ cursor: "pointer" }} src={google} alt="Google" />
-            </a>
+            {/* <a href={googleAuthUrl} target="_self" rel="noopener noreferrer"> */}
+            <img style={{ cursor: "pointer" }} src={google} alt="Google" />
+            {/* </a> */}
           </div>
         </div>
         <div className="w-1/2  rounded-2xl bg-[#000842]  m-auto">
