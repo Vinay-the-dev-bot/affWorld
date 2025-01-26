@@ -50,6 +50,7 @@ const AuthPage = () => {
             status: "success",
             duration: 1000
           });
+          setPasswordVisible(false);
           navigate("/");
         } else {
           localStorage.setItem("taskConnectToken", "");
@@ -63,14 +64,28 @@ const AuthPage = () => {
         console.error("Error:", error);
       }
     } else {
+      if (formData.password !== formData.confirmPassword) {
+        toast({
+          description: "Passwords do not match.",
+          status: "error",
+          duration: 1000
+        });
+        return;
+      }
       try {
         const response = await axios.post(
           `${base_URL}/users/register`,
           formData,
           { headers: { "Content-Type": "multipart/form-data" } }
         );
-        if (response.data.status) setIsLogin(!isLogin);
-        else {
+        if (response.data.status) {
+          setIsLogin(!isLogin);
+          toast({
+            description: response?.data?.msg || "User Registered",
+            status: "success",
+            duration: 1000
+          });
+        } else {
           toast({
             description: response.data.msg || "Something went wrong.",
             status: "error",

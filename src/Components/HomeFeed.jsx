@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import { base_URL, POSTS } from "../Utility/Utility";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import { useToast } from "@chakra-ui/react";
 
@@ -11,6 +11,7 @@ const HomeFeed = () => {
   const toast = useToast();
   useEffect(() => {
     const fetchPosts = async () => {
+      setIsLoading(true);
       try {
         const response = await axios.get(`${base_URL}/post/`, {
           headers: {
@@ -19,8 +20,10 @@ const HomeFeed = () => {
         });
         const { posts, status, error } = response.data;
         if (status) {
+          setIsLoading(false);
           dispatch({ type: POSTS, payload: [...posts] });
         } else {
+          setIsLoading(false);
           toast({
             title: "There was some error",
             description: error || "",
@@ -36,34 +39,44 @@ const HomeFeed = () => {
 
     if (token) fetchPosts();
   }, []);
+  const [isLoading, setIsLoading] = useState(false);
   return (
     <>
       <p className="text-2xl font-semibold text-gray-800 mb-4">Feed</p>
-      {feedData && feedData.length > 0
-        ? feedData.map((feed, key) => {
-            console.log(feed);
-            return (
-              <div
-                key={key}
-                className="w-9/10 p-4 m-4 bg-white shadow-md rounded-lg"
-              >
-                <p className="font-medium text-2xl text-gray-900">
-                  {feed.userName}
-                </p>
-                <p className="text-xs text-gray-500 mt-1">{feed.createdDate}</p>
-                <p className="font-medium text-2xl text-gray-900">
-                  {feed.text}
-                </p>
-                <p className="text-xl text-gray-600 mt-1">{feed.caption}</p>
-                <img
-                  className="max-h-[80%] mt-2 rounded-lg"
-                  src={feed.image}
-                  alt="feed-image"
-                />
-              </div>
-            );
-          })
-        : "Please Start posting to see the feed"}
+
+      {isLoading ? (
+        <p>Loading</p>
+      ) : (
+        <>
+          {feedData && feedData.length > 0
+            ? feedData.map((feed, key) => {
+                console.log(feed);
+                return (
+                  <div
+                    key={key}
+                    className="w-9/10 p-4 m-4 bg-white shadow-md rounded-lg"
+                  >
+                    <p className="font-medium text-2xl text-gray-900">
+                      {feed.userName}
+                    </p>
+                    <p className="text-xs text-gray-500 mt-1">
+                      {feed.createdDate}
+                    </p>
+                    <p className="font-medium text-2xl text-gray-900">
+                      {feed.text}
+                    </p>
+                    <p className="text-xl text-gray-600 mt-1">{feed.caption}</p>
+                    <img
+                      className="max-h-[80%] mt-2 rounded-lg"
+                      src={feed.image}
+                      alt="feed-image"
+                    />
+                  </div>
+                );
+              })
+            : "Please Start posting to see the feed"}
+        </>
+      )}
     </>
   );
   return (

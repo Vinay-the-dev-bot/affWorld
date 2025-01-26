@@ -15,7 +15,7 @@ import {
 } from "../Utility/Utility";
 import { useDisclosure, useToast } from "@chakra-ui/react";
 import ViewTask from "./ViewTask";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 
 const TaskCard = ({ task }) => {
@@ -177,6 +177,7 @@ const Tasks = () => {
 
   useEffect(() => {
     const fetchTasks = async () => {
+      setIsLoading(true);
       try {
         const response = await axios.get(`${base_URL}/tasks/`, {
           headers: {
@@ -186,7 +187,9 @@ const Tasks = () => {
         const { tasks, status, error } = response.data;
         if (status) {
           dispatch({ type: TASKS, payload: [...tasks] });
+          setIsLoading(false);
         } else {
+          setIsLoading(false);
           toast({
             title: "There was some error",
             description: error || "",
@@ -263,31 +266,38 @@ const Tasks = () => {
         [taskStatus.done]: []
       }
     );
+  const [isLoading, setIsLoading] = useState(false);
 
   return (
     <DndProvider backend={HTML5Backend}>
       <p className="text-2xl font-semibold text-gray-800 mb-4">Tasks</p>
       <div className="grid grid-cols-3 gap-[20px]">
-        {tasks.length > 0 ? (
+        {isLoading ? (
+          <p>Loading</p>
+        ) : (
           <>
-            {Object.keys(taskGroups).map((status) => (
-              <TaskColumn
-                key={status}
-                status={status}
-                tasks={taskGroups[status]}
-                moveTask={moveTask}
-              />
-            ))}
-            {deletedTasks.length > 0 && (
-              <TaskColumn
-                status={deletedTasks?.[0]?.status}
-                tasks={deletedTasks}
-                moveTask={moveTask}
-              />
+            {tasks.length > 0 ? (
+              <>
+                {Object.keys(taskGroups).map((status) => (
+                  <TaskColumn
+                    key={status}
+                    status={status}
+                    tasks={taskGroups[status]}
+                    moveTask={moveTask}
+                  />
+                ))}
+                {deletedTasks.length > 0 && (
+                  <TaskColumn
+                    status={deletedTasks?.[0]?.status}
+                    tasks={deletedTasks}
+                    moveTask={moveTask}
+                  />
+                )}
+              </>
+            ) : (
+              <p className="text-xs text-gray-800 mb-4">No Tasks</p>
             )}
           </>
-        ) : (
-          <p className="text-xs text-gray-800 mb-4">No Tasks</p>
         )}
       </div>
     </DndProvider>
