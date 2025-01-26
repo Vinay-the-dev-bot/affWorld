@@ -205,22 +205,41 @@ const Tasks = () => {
 
   const toast = useToast();
   const dispatch = useDispatch();
-  const moveTask = (id, newStatus) => {
-    dispatch({ type: TASKSTATUS, payload: { id, newStatus } });
+  const moveTask = async (id, newStatus) => {
+    const response = await axios.patch(
+      `${base_URL}/tasks/${id}`,
+      { id, status: newStatus },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      }
+    );
+    const { status } = response.data;
     const statusCode = {
       [taskStatus.completed]: "success",
       [taskStatus.pending]: "error",
       [taskStatus.done]: "info"
-      //   [taskStatus.inProgress]: "info"
     };
-    toast({
-      title: newStatus,
-      description: `Task has been moved to ${newStatus}.`,
-      status: statusCode[newStatus] || "info",
-      variant: "left-accent",
-      duration: 1000,
-      isClosable: true
-    });
+    if (status) {
+      dispatch({ type: TASKSTATUS, payload: { id, newStatus } });
+      toast({
+        title: newStatus,
+        description: `Task has been moved to ${newStatus}.`,
+        status: statusCode[newStatus] || "info",
+        variant: "left-accent",
+        duration: 1000,
+        isClosable: true
+      });
+    } else {
+      toast({
+        title: "Error!",
+        description: `There was an error while updating task`,
+        status: "error",
+        duration: 1000,
+        isClosable: true
+      });
+    }
   };
   const priorityCode = { Low: 0, Medium: 1, High: 2 };
   const deletedTasks = tasks.filter(
