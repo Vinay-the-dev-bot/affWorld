@@ -111,7 +111,7 @@ const TaskCard = ({ task }) => {
             </div>
           )} */}
         </div>
-        <div className="text-sm flex text-black pt-[10px] ">
+        <div className="text-sm flex flex-col text-black pt-[10px] ">
           <div
             className="flex h-fit w-fit"
             style={{
@@ -137,7 +137,7 @@ const TaskCard = ({ task }) => {
               {task.priority}
             </span>
           </div>
-          <span className="pl-[10px]"> Due: {task.dueDate || "-"}</span>
+          <span className="pt-[10px]"> Due: {task.dueDate || "-"}</span>
         </div>
       </div>
       <ViewTask
